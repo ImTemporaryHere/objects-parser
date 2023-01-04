@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    //"allowJs": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "noImplicitAny": false,
+    "target": "es2020",
+    "outDir": "dist"
+  },
+  "compileOnSave": true,
+  "buildOnSave": true,
+  "exclude": ["node_modules", ".npm"]
+}
