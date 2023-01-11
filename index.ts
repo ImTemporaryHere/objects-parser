@@ -58,7 +58,7 @@ class ObjectsParserByPath {
     if(this._identifierPath.includes('[]')) {
 
       const identifiedObjectsToBeParsed = this.handlePathWithArrays(this._identifierPath, true)
-
+    
       const identifierPath = this._identifierPath.join('.').split('.[].').pop()
 
       const pathToParameterValue = this._path.join('.').split('.[].').pop()
@@ -119,23 +119,33 @@ class ObjectsParserByPath {
 
   private handlePathWithArrays (_path: string[], returnOnlyIdentifiedObject?: boolean) {
     try {
-      const pathToArray = _path.join('.').split('.[].')[0]
+      
+      let path = _path.join('.').split('.[].').slice(1).join('.[].');
 
-    pathToArray.split('.').forEach(partOfPath=>{
-      const regexpMatch = partOfPath.match(/\[(.+)\]/);
-      if(regexpMatch) {
-        this.goNextStepInPath(regexpMatch[1])      
+
+      if(_path[0]!=='[]') {
+        const pathToArray = _path.join('.').split('.[].')[0]
+
+        pathToArray.split('.').forEach(partOfPath=>{
+          const regexpMatch = partOfPath.match(/\[(.+)\]/);
+          if(regexpMatch) {
+            // console.log('regexpMatch[1]',regexpMatch[1])
+            this.goNextStepInPath(regexpMatch[1])      
+          }
+          else{
+            
+            this.goNextStepInPath(partOfPath)
+          }
+      });
       }
       else{
-        this.goNextStepInPath(partOfPath)
+        path = _path.slice(1,).join('.')
       }
-      
-    });
-    // console.log(this._objectTobeParsed, 'object to be parsed in handle path with arrays');
+
     (this._objectTobeParsed as Array<any>).forEach((objectInArray)=>{
-      const path = _path.join('.').split('.[].').slice(1).join('.[].')
+  
       const values = ObjectsParserByPath.getArrayOfValues({objectTobeParsed: objectInArray, path, returnOnlyIdentifiedObject})
-      // console.log('values',values)
+      
       this._arrayOfValues.push(...values)
     })
 
@@ -1088,9 +1098,9 @@ console.log(JSON.stringify(arrayOfValues9)  === exptectedResult9 ? 'passed': 'fa
 
 
 
-const checkParamInQuoteItemPathToState6 = '[0].orderItem.[].orderItem.[0].product.characteristic.[].value.[0]';
+const checkParamInQuoteItemPathToState6 = '[].orderItem.[].orderItem.[0].product.characteristic.[].value.[0]';
 
-const identifierPath4 = '[0].orderItem.[].orderItem.[0].product.characteristic.[].name';
+const identifierPath4 = '[].orderItem.[].orderItem.[0].product.characteristic.[].name';
 
 const exptectedResult10 = `["test_ta_plan","test_ta_plan"]`
 

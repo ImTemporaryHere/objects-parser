@@ -80,21 +80,25 @@ class ObjectsParserByPath {
     }
     handlePathWithArrays(_path, returnOnlyIdentifiedObject) {
         try {
-            const pathToArray = _path.join('.').split('.[].')[0];
-            pathToArray.split('.').forEach(partOfPath => {
-                const regexpMatch = partOfPath.match(/\[(.+)\]/);
-                if (regexpMatch) {
-                    this.goNextStepInPath(regexpMatch[1]);
-                }
-                else {
-                    this.goNextStepInPath(partOfPath);
-                }
-            });
-            // console.log(this._objectTobeParsed, 'object to be parsed in handle path with arrays');
+            let path = _path.join('.').split('.[].').slice(1).join('.[].');
+            if (_path[0] !== '[]') {
+                const pathToArray = _path.join('.').split('.[].')[0];
+                pathToArray.split('.').forEach(partOfPath => {
+                    const regexpMatch = partOfPath.match(/\[(.+)\]/);
+                    if (regexpMatch) {
+                        // console.log('regexpMatch[1]',regexpMatch[1])
+                        this.goNextStepInPath(regexpMatch[1]);
+                    }
+                    else {
+                        this.goNextStepInPath(partOfPath);
+                    }
+                });
+            }
+            else {
+                path = _path.slice(1).join('.');
+            }
             this._objectTobeParsed.forEach((objectInArray) => {
-                const path = _path.join('.').split('.[].').slice(1).join('.[].');
                 const values = ObjectsParserByPath.getArrayOfValues({ objectTobeParsed: objectInArray, path, returnOnlyIdentifiedObject });
-                // console.log('values',values)
                 this._arrayOfValues.push(...values);
             });
             return this._arrayOfValues;
@@ -941,8 +945,8 @@ const arrayOfValues9 = ObjectsParserByPath.getArrayOfValues({
     path: checkParamInQuoteItemPathToState5,
 });
 console.log(JSON.stringify(arrayOfValues9) === exptectedResult9 ? 'passed' : 'failed ' + exptectedResult9, arrayOfValues9);
-const checkParamInQuoteItemPathToState6 = '[0].orderItem.[].orderItem.[0].product.characteristic.[].value.[0]';
-const identifierPath4 = '[0].orderItem.[].orderItem.[0].product.characteristic.[].name';
+const checkParamInQuoteItemPathToState6 = '[].orderItem.[].orderItem.[0].product.characteristic.[].value.[0]';
+const identifierPath4 = '[].orderItem.[].orderItem.[0].product.characteristic.[].name';
 const exptectedResult10 = `["test_ta_plan","test_ta_plan"]`;
 const arrayOfValues10 = ObjectsParserByPath.getArrayOfValues({
     objectTobeParsed: responseGetOrderParams,
