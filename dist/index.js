@@ -1,49 +1,3 @@
-// function checkValueInObjectByPath(
-//   objectToBeParsed: object,
-//   path: string[],
-//   expectedValue: any
-// ): boolean {
-//   // console.log(
-//   //   'objectToBeParsed -',
-//   //   JSON.stringify(objectToBeParsed),
-//   //   '\n',
-//   //   'path -',
-//   //   JSON.stringify(path),
-//   //   '\n',
-//   //   expectedValue
-//   // );
-//   if (path.length === 1) {
-//     if (objectToBeParsed[path[0]] === expectedValue) {
-//       return true;
-//     }
-//     return false;
-//   }
-//   if (path[1] === '[]') {
-//     if (path.length === 2) {
-//       // look for exptected value in array
-//       if ((objectToBeParsed[path[0]] as Array<any>).includes(expectedValue)) {
-//         return true;
-//       }
-//       return false;
-//     }
-//     for (const nestedObject of objectToBeParsed[path[0]] as Array<any>) {
-//       if (
-//         checkValueInObjectByPath(nestedObject, path.slice(2), expectedValue)
-//       ) {
-//         return true;
-//       }
-//     }
-//     return false;
-//   }
-//   return checkValueInObjectByPath(
-//     objectToBeParsed[path[0]],
-//     path.slice(1),
-//     expectedValue
-//   );
-// }
-// 'asdf.qwer.[].qqqq.lolo.[].aooo.aaa'
-// 'quoteItem.[].productOffering.id'
-// 'quoteItem.[].productOffering.id.[0]'
 class ObjectsParserByPath {
     constructor(_objectTobeParsed, _path, _identifierPath, _returnOnlyObjectWithIdentifier) {
         this._objectTobeParsed = _objectTobeParsed;
@@ -56,25 +10,24 @@ class ObjectsParserByPath {
         if (this._identifierPath) {
             return this.handlePathWithIdentifier();
         }
+        // console.log(this._objectTobeParsed, '!!!!!!', this._path)
         if (this._path.includes('[]')) {
-            return this.handlePathWithArrays(this._path);
+            return this.handlePathWithArrays(this._path, this._returnOnlyObjectWithIdentifier);
+        }
+        if (this._returnOnlyObjectWithIdentifier) {
+            return [this._objectTobeParsed];
         }
         if (this._path.length === 1) {
             const regexpMatch = this._path[0].match(/\[(.+)\]/);
             if (regexpMatch) {
-                // console.log(regexpMatch)
                 this._arrayOfValues.push(this._objectTobeParsed[regexpMatch[1]]);
                 return this._arrayOfValues;
             }
             this._arrayOfValues.push(this._objectTobeParsed[this._path[0]]);
             return this._arrayOfValues;
         }
-        if (this._returnOnlyObjectWithIdentifier) {
-            return [this._objectTobeParsed];
-        }
         const regexpMatch = this._path[0].match(/\[(.+)\]/);
         if (regexpMatch) {
-            // console.log(regexpMatch)
             this.goNextStepInPath(regexpMatch[1]);
         }
         else {
@@ -126,23 +79,41 @@ class ObjectsParserByPath {
         });
     }
     handlePathWithArrays(_path, returnOnlyIdentifiedObject) {
-        const pathToArray = _path.join('.').split('.[].')[0];
-        pathToArray.split('.').forEach(partOfPath => {
-            this.goNextStepInPath(partOfPath);
-        });
-        this._objectTobeParsed.forEach((objectInArray) => {
-            const path = _path.join('.').split('.[].').slice(1).join('.[].');
-            const values = ObjectsParserByPath.getArrayOfValues({ objectTobeParsed: objectInArray, path, returnOnlyIdentifiedObject });
-            this._arrayOfValues.push(...values);
-        });
-        return this._arrayOfValues;
+        try {
+            const pathToArray = _path.join('.').split('.[].')[0];
+            pathToArray.split('.').forEach(partOfPath => {
+                const regexpMatch = partOfPath.match(/\[(.+)\]/);
+                if (regexpMatch) {
+                    this.goNextStepInPath(regexpMatch[1]);
+                }
+                else {
+                    this.goNextStepInPath(partOfPath);
+                }
+            });
+            // console.log(this._objectTobeParsed, 'object to be parsed in handle path with arrays');
+            this._objectTobeParsed.forEach((objectInArray) => {
+                const path = _path.join('.').split('.[].').slice(1).join('.[].');
+                const values = ObjectsParserByPath.getArrayOfValues({ objectTobeParsed: objectInArray, path, returnOnlyIdentifiedObject });
+                // console.log('values',values)
+                this._arrayOfValues.push(...values);
+            });
+            return this._arrayOfValues;
+        }
+        catch (e) {
+            console.log('erorr in handlePathWithArrays', e);
+        }
     }
     goNextStepInPath(key) {
-        if (this._objectTobeParsed[key]) {
-            this._objectTobeParsed = this._objectTobeParsed[key];
+        try {
+            if (this._objectTobeParsed[key]) {
+                this._objectTobeParsed = this._objectTobeParsed[key];
+            }
+            else
+                this._objectTobeParsed = null;
         }
-        else
-            this._objectTobeParsed = null;
+        catch (e) {
+            console.log('error in goNextStepInPath', e);
+        }
     }
     static getArrayOfValues(args) {
         const { objectTobeParsed, path, identifierPath, returnOnlyIdentifiedObject } = args;
@@ -525,15 +496,15 @@ const arrayOfValues7 = ObjectsParserByPath.getArrayOfValues({
 console.log(JSON.stringify(arrayOfValues7) === exptectedResult7 ? 'passed' : 'failed ' + exptectedResult7);
 const responseGetOrderParams = [
     {
-        "id": "279fc5b5-6d69-4a20-8fc3-76fb7259fd4c",
-        "href": "/productOrderingManagement/v1/productOrder/279fc5b5-6d69-4a20-8fc3-76fb7259fd4c",
-        "externalId": "fbd94ba0-dff5-41c5-bbb0-d8e6fce53466",
+        "id": "ac077916-103b-4aff-a57a-1920085aed77",
+        "href": "/productOrderingManagement/v1/productOrder/ac077916-103b-4aff-a57a-1920085aed77",
+        "externalId": "2979be3f-048c-40e2-8d42-a619b9d01397",
         "category": "Residential Customers",
         "state": "completed",
-        "orderDate": "2023-01-10T17:32:26.697+00:00",
-        "startDate": "2023-01-10T17:32:26.824+00:00",
-        "completionDate": "2023-01-10T17:32:31.180+00:00",
-        "expectedCompletionDate": "2023-01-10T17:32:26.824+00:00",
+        "orderDate": "2023-01-11T11:53:15.273+00:00",
+        "startDate": "2023-01-11T11:53:15.495+00:00",
+        "completionDate": "2023-01-11T11:53:23.822+00:00",
+        "expectedCompletionDate": "2023-01-11T11:53:15.495+00:00",
         "ponrPassed": true,
         "ponrState": "modificationPonr",
         "channel": [
@@ -544,16 +515,16 @@ const responseGetOrderParams = [
         ],
         "relatedParty": [
             {
-                "id": "taemailnCxqwgI_ZqWLMjf@telus.com",
-                "name": "TestNPGXHNL TaEHQTQZY",
+                "id": "taemailKAlFYbi_RksppdC@telus.com",
+                "name": "TestLYTDOQV TaEKHBVSM",
                 "role": "Customer",
                 "@referredType": "Customer"
             }
         ],
         "orderTotalPrice": [
             {
-                "name": "Total NRC by Quote",
-                "priceType": "Total NRC",
+                "name": "Total RC by Quote",
+                "priceType": "Total RC",
                 "price": {
                     "taxIncludedAmount": "0.00",
                     "dutyFreeAmount": "0.00"
@@ -561,16 +532,8 @@ const responseGetOrderParams = [
                 "@type": "QuotePrice"
             },
             {
-                "name": "Total RC Tax by Quote",
-                "priceType": "Total RC Tax",
-                "price": {
-                    "taxIncludedAmount": "0.00"
-                },
-                "@type": "QuotePrice"
-            },
-            {
-                "name": "Total RC by Quote",
-                "priceType": "Total RC",
+                "name": "Total NRC by Quote",
+                "priceType": "Total NRC",
                 "price": {
                     "taxIncludedAmount": "0.00",
                     "dutyFreeAmount": "0.00"
@@ -596,17 +559,8 @@ const responseGetOrderParams = [
                 "@type": "QuotePrice"
             },
             {
-                "name": "Total NRC Reduction by Quote",
-                "priceType": "Total NRC Reduction",
-                "price": {
-                    "taxIncludedAmount": "0.00",
-                    "dutyFreeAmount": "0.00"
-                },
-                "@type": "QuotePrice"
-            },
-            {
-                "name": "Total Deactivation Fee Tax by Quote",
-                "priceType": "Total Deactivation Fee Tax",
+                "name": "Total RC Tax by Quote",
+                "priceType": "Total RC Tax",
                 "price": {
                     "taxIncludedAmount": "0.00"
                 },
@@ -619,11 +573,179 @@ const responseGetOrderParams = [
                     "taxIncludedAmount": "0.00"
                 },
                 "@type": "QuotePrice"
+            },
+            {
+                "name": "Total Deactivation Fee Tax by Quote",
+                "priceType": "Total Deactivation Fee Tax",
+                "price": {
+                    "taxIncludedAmount": "0.00"
+                },
+                "@type": "QuotePrice"
+            },
+            {
+                "name": "Total NRC Reduction by Quote",
+                "priceType": "Total NRC Reduction",
+                "price": {
+                    "taxIncludedAmount": "0.00",
+                    "dutyFreeAmount": "0.00"
+                },
+                "@type": "QuotePrice"
             }
         ],
         "orderItem": [
             {
-                "id": "4b4bbc8e-8884-49f8-9901-edae3865cf4b",
+                "id": "5923c16b-4514-4961-8c63-55af01ed79de",
+                "action": "add",
+                "state": "completed",
+                "quantity": 1,
+                "ponrPassed": true,
+                "ponrState": "modificationPonr",
+                "itemTotalPrice": [
+                    {
+                        "name": "Total RC by Quote Item",
+                        "priceType": "Total RC",
+                        "price": {},
+                        "@type": "QuotePrice"
+                    },
+                    {
+                        "name": "Total NRC by Quote Item",
+                        "priceType": "Total NRC",
+                        "price": {},
+                        "@type": "QuotePrice"
+                    }
+                ],
+                "productOffering": {
+                    "id": "48b2e652-946a-461c-9b30-886bf9769586",
+                    "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/48b2e652-946a-461c-9b30-886bf9769586",
+                    "name": "Mobility Prepaid (TLO)",
+                    "@referredType": "ProductOffering"
+                },
+                "product": {
+                    "id": "5923c16b-4514-4961-8c63-55af01ed79de",
+                    "name": "Mobility Prepaid (TLO) #1",
+                    "status": "ACTIVE",
+                    "terminationDate": "2023-01-11T11:54:21.155+00:00",
+                    "effectiveDate": "2023-01-11T11:53:21.190+00:00",
+                    "relatedParty": [
+                        {
+                            "id": "taemailKAlFYbi_RksppdC@telus.com",
+                            "role": "Customer",
+                            "@referredType": "Customer"
+                        }
+                    ],
+                    "productSpecification": {
+                        "id": "96d8ff89-3c79-4483-bc0b-47b59ab74d53",
+                        "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/48b2e652-946a-461c-9b30-886bf9769586",
+                        "name": "Mobility Prepaid (PS)",
+                        "version": "0.2"
+                    },
+                    "distributionChannelId": "PERMIT",
+                    "extendedParameters": {
+                        "transactionType": [
+                            "Enroll"
+                        ],
+                        "externalProductOfferingId": [
+                            "test_ta_plan"
+                        ],
+                        "hierarchyUnrolled": [
+                            "true"
+                        ]
+                    },
+                    "expirationDate": 1673438061156,
+                    "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf"
+                },
+                "orderItem": [
+                    {
+                        "id": "e324be58-3b8c-4fbb-8a4b-7d9fb47c9f06",
+                        "action": "add",
+                        "state": "completed",
+                        "quantity": 1,
+                        "ponrPassed": true,
+                        "ponrState": "modificationPonr",
+                        "productOffering": {
+                            "id": "220d1870-6743-46bc-810f-3f8122622438",
+                            "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/220d1870-6743-46bc-810f-3f8122622438",
+                            "name": "e-SIM Card",
+                            "@referredType": "ProductOffering"
+                        },
+                        "product": {
+                            "id": "e324be58-3b8c-4fbb-8a4b-7d9fb47c9f06",
+                            "name": "e-SIM Card (SLO) #1",
+                            "status": "COMPLETED",
+                            "terminationDate": "2023-01-11T11:54:21.249+00:00",
+                            "effectiveDate": "2023-01-11T11:53:21.189+00:00",
+                            "characteristic": [
+                                {
+                                    "name": "Needs Fulfillment?",
+                                    "charSpecId": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+                                    "value": [
+                                        "Yes"
+                                    ],
+                                    "@type": "ProductCharacteristic"
+                                },
+                                {
+                                    "name": "[Public] ICCID",
+                                    "charSpecId": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+                                    "value": [
+                                        8912230200156697480
+                                    ]
+                                },
+                                {
+                                    "name": "[Public] Activation Code",
+                                    "charSpecId": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+                                    "value": [
+                                        "LPA:1$rsp-1007.oberthur.net$I4EVD-B3P23-FGBGT-4E8WW"
+                                    ]
+                                }
+                            ],
+                            "productSpecification": {
+                                "id": "c9c717b5-f61a-4a4d-b70f-df0931f7a1a1",
+                                "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/220d1870-6743-46bc-810f-3f8122622438",
+                                "name": "e-SIM Card (PS)",
+                                "version": "0.6"
+                            },
+                            "distributionChannelId": "PERMIT",
+                            "extendedParameters": {
+                                "transactionType": [
+                                    "Enroll"
+                                ],
+                                "hierarchyUnrolled": [
+                                    "true"
+                                ]
+                            },
+                            "expirationDate": 1673438061250,
+                            "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf"
+                        },
+                        "rootId": "5923c16b-4514-4961-8c63-55af01ed79de",
+                        "sems-eventTime": 1673438001110,
+                        "extendedParameters": {
+                            "transactionType": [
+                                "Enroll"
+                            ],
+                            "hierarchyUnrolled": [
+                                "true"
+                            ]
+                        },
+                        "parentId": "5923c16b-4514-4961-8c63-55af01ed79de",
+                        "overrideMode": "NET"
+                    }
+                ],
+                "rootId": "5923c16b-4514-4961-8c63-55af01ed79de",
+                "extendedParameters": {
+                    "transactionType": [
+                        "Enroll"
+                    ],
+                    "externalProductOfferingId": [
+                        "test_ta_plan"
+                    ],
+                    "hierarchyUnrolled": [
+                        "true"
+                    ]
+                },
+                "overrideMode": "NET"
+            },
+            {
+                "id": "491bb5e9-a047-4b50-aaf0-7c987775cd8b",
                 "action": "add",
                 "state": "completed",
                 "quantity": 1,
@@ -650,14 +772,14 @@ const responseGetOrderParams = [
                     "@referredType": "ProductOffering"
                 },
                 "product": {
-                    "id": "4b4bbc8e-8884-49f8-9901-edae3865cf4b",
-                    "name": "Mobility Prepaid (TLO) #1",
+                    "id": "491bb5e9-a047-4b50-aaf0-7c987775cd8b",
+                    "name": "Mobility Prepaid (TLO) #2",
                     "status": "ACTIVE",
-                    "terminationDate": "2023-01-10T17:33:31.064+00:00",
-                    "effectiveDate": "2023-01-10T17:32:31.091+00:00",
+                    "terminationDate": "2023-01-11T11:54:23.730+00:00",
+                    "effectiveDate": "2023-01-11T11:53:23.761+00:00",
                     "relatedParty": [
                         {
-                            "id": "taemailnCxqwgI_ZqWLMjf@telus.com",
+                            "id": "taemailKAlFYbi_RksppdC@telus.com",
                             "role": "Customer",
                             "@referredType": "Customer"
                         }
@@ -680,12 +802,12 @@ const responseGetOrderParams = [
                             "true"
                         ]
                     },
-                    "expirationDate": 1673372011064,
+                    "expirationDate": 1673438063731,
                     "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf"
                 },
                 "orderItem": [
                     {
-                        "id": "6454fc85-7172-4ea9-8059-5aec3e47b8a1",
+                        "id": "4ebd6b8d-cee4-4fc2-b3f2-a5c30ec01a48",
                         "action": "add",
                         "state": "completed",
                         "quantity": 1,
@@ -698,19 +820,12 @@ const responseGetOrderParams = [
                             "@referredType": "ProductOffering"
                         },
                         "product": {
-                            "id": "6454fc85-7172-4ea9-8059-5aec3e47b8a1",
+                            "id": "4ebd6b8d-cee4-4fc2-b3f2-a5c30ec01a48",
                             "name": "e-SIM Card (SLO) #1",
                             "status": "COMPLETED",
-                            "terminationDate": "2023-01-10T17:33:30.987+00:00",
-                            "effectiveDate": "2023-01-10T17:32:31.008+00:00",
+                            "terminationDate": "2023-01-11T11:54:23.659+00:00",
+                            "effectiveDate": "2023-01-11T11:53:23.682+00:00",
                             "characteristic": [
-                                {
-                                    "name": "[Public] ICCID",
-                                    "charSpecId": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
-                                    "value": [
-                                        8912230200156694586
-                                    ]
-                                },
                                 {
                                     "name": "Needs Fulfillment?",
                                     "charSpecId": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
@@ -720,10 +835,17 @@ const responseGetOrderParams = [
                                     "@type": "ProductCharacteristic"
                                 },
                                 {
+                                    "name": "[Public] ICCID",
+                                    "charSpecId": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+                                    "value": [
+                                        8912230200156693976
+                                    ]
+                                },
+                                {
                                     "name": "[Public] Activation Code",
                                     "charSpecId": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
                                     "value": [
-                                        "LPA:1$rsp-1007.oberthur.net$HS6ED-AHIPR-YP7ES-HRDOW"
+                                        "LPA:1$rsp-1007.oberthur.net$FXI1X-F66K0-R3V1X-MURTU"
                                     ]
                                 }
                             ],
@@ -742,11 +864,11 @@ const responseGetOrderParams = [
                                     "true"
                                 ]
                             },
-                            "expirationDate": 1673372010987,
+                            "expirationDate": 1673438063659,
                             "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf"
                         },
-                        "rootId": "4b4bbc8e-8884-49f8-9901-edae3865cf4b",
-                        "sems-eventTime": 1673371950941,
+                        "rootId": "491bb5e9-a047-4b50-aaf0-7c987775cd8b",
+                        "sems-eventTime": 1673438003618,
                         "extendedParameters": {
                             "transactionType": [
                                 "Enroll"
@@ -755,11 +877,11 @@ const responseGetOrderParams = [
                                 "true"
                             ]
                         },
-                        "parentId": "4b4bbc8e-8884-49f8-9901-edae3865cf4b",
+                        "parentId": "491bb5e9-a047-4b50-aaf0-7c987775cd8b",
                         "overrideMode": "NET"
                     }
                 ],
-                "rootId": "4b4bbc8e-8884-49f8-9901-edae3865cf4b",
+                "rootId": "491bb5e9-a047-4b50-aaf0-7c987775cd8b",
                 "extendedParameters": {
                     "transactionType": [
                         "Enroll"
@@ -777,16 +899,16 @@ const responseGetOrderParams = [
         "orderRelationship": [],
         "quote": [
             {
-                "id": "fbd94ba0-dff5-41c5-bbb0-d8e6fce53466",
-                "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/quote-tmf-service/quoteManagement/quote/fbd94ba0-dff5-41c5-bbb0-d8e6fce53466",
-                "name": "Quote #6445",
+                "id": "2979be3f-048c-40e2-8d42-a619b9d01397",
+                "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/quote-tmf-service/quoteManagement/quote/2979be3f-048c-40e2-8d42-a619b9d01397",
+                "name": "Quote #6495",
                 "@referredType": "Quote"
             }
         ],
         "requester_header": "cpq",
         "extendedParameters": {
             "actualQuoteId": [
-                "fbd94ba0-dff5-41c5-bbb0-d8e6fce53466"
+                "2979be3f-048c-40e2-8d42-a619b9d01397"
             ],
             "transaction-family": [
                 "WLS"
@@ -801,7 +923,7 @@ const responseGetOrderParams = [
                 "Yes"
             ]
         },
-        "customerId": "taemailnCxqwgI_ZqWLMjf@telus.com",
+        "customerId": "taemailKAlFYbi_RksppdC@telus.com",
         "overrideMode": "catalogDriven"
     }
 ];
@@ -812,10 +934,19 @@ const arrayOfValues8 = ObjectsParserByPath.getArrayOfValues({
     path: checkParamInQuoteItemPathToState4,
 });
 console.log(JSON.stringify(arrayOfValues8) === exptectedResult8 ? 'passed' : 'failed ' + exptectedResult8, arrayOfValues8);
-const checkParamInQuoteItemPathToState5 = '[0].orderItem.[0].product.extendedParameters.externalProductOfferingId.[0]';
-const exptectedResult9 = `["test_ta_plan"]`;
+const checkParamInQuoteItemPathToState5 = '[0].orderItem.[].product.extendedParameters.externalProductOfferingId.[0]';
+const exptectedResult9 = `["test_ta_plan","test_ta_plan"]`;
 const arrayOfValues9 = ObjectsParserByPath.getArrayOfValues({
     objectTobeParsed: responseGetOrderParams,
     path: checkParamInQuoteItemPathToState5,
 });
 console.log(JSON.stringify(arrayOfValues9) === exptectedResult9 ? 'passed' : 'failed ' + exptectedResult9, arrayOfValues9);
+const checkParamInQuoteItemPathToState6 = '[0].orderItem.[].orderItem.[0].product.characteristic.[].value.[0]';
+const identifierPath4 = '[0].orderItem.[].orderItem.[0].product.characteristic.[].name';
+const exptectedResult10 = `["test_ta_plan","test_ta_plan"]`;
+const arrayOfValues10 = ObjectsParserByPath.getArrayOfValues({
+    objectTobeParsed: responseGetOrderParams,
+    path: checkParamInQuoteItemPathToState6,
+    identifierPath: identifierPath4
+});
+console.log(JSON.stringify(arrayOfValues10) === exptectedResult10 ? 'passed' : 'failed ' + exptectedResult10, arrayOfValues10);
