@@ -58,12 +58,11 @@ class ObjectsParserByPath {
     if(this._identifierPath.includes('[]')) {
 
       const identifiedObjectsToBeParsed = this.handlePathWithArrays(this._identifierPath, true)
-    
+      
       const identifierPath = this._identifierPath.join('.').split('.[].').pop()
-
-      const pathToParameterValue = this._path.join('.').split('.[].').pop()
-
-
+      const lengthForSlice  = this._identifierPath.length - identifierPath.split('.').length
+      const pathToParameterValue = this._path.slice(lengthForSlice).join('.')
+     
       return identifiedObjectsToBeParsed.map((identifiedObject)=>{
 
         const identifier = ObjectsParserByPath.getArrayOfValues({
@@ -129,11 +128,10 @@ class ObjectsParserByPath {
         pathToArray.split('.').forEach(partOfPath=>{
           const regexpMatch = partOfPath.match(/\[(.+)\]/);
           if(regexpMatch) {
-            // console.log('regexpMatch[1]',regexpMatch[1])
             this.goNextStepInPath(regexpMatch[1])      
           }
           else{
-            
+            // console.log('not regeexp', partOfPath,'\n',this._objectTobeParsed)
             this.goNextStepInPath(partOfPath)
           }
       });
@@ -1098,11 +1096,24 @@ console.log(JSON.stringify(arrayOfValues9)  === exptectedResult9 ? 'passed': 'fa
 
 
 
-const checkParamInQuoteItemPathToState6 = '[].orderItem.[].orderItem.[0].product.characteristic.[].value.[0]';
+const checkParamInQuoteItemPathToState6 = '[0].orderItem.[].orderItem.[0].product.characteristic.[].value.[0]';
 
-const identifierPath4 = '[].orderItem.[].orderItem.[0].product.characteristic.[].name';
+const identifierPath4 = '[0].orderItem.[].orderItem.[0].product.characteristic.[].name';
 
-const exptectedResult10 = `["test_ta_plan","test_ta_plan"]`
+const exptectedResult10 = JSON.stringify([
+  { identifier: 'Needs Fulfillment?', parameterValue: 'Yes' },
+  { identifier: '[Public] ICCID', parameterValue: 8912230200156698000 },
+  {
+    identifier: '[Public] Activation Code',
+    parameterValue: 'LPA:1$rsp-1007.oberthur.net$I4EVD-B3P23-FGBGT-4E8WW'
+  },
+  { identifier: 'Needs Fulfillment?', parameterValue: 'Yes' },
+  { identifier: '[Public] ICCID', parameterValue: 8912230200156694000 },
+  {
+    identifier: '[Public] Activation Code',
+    parameterValue: 'LPA:1$rsp-1007.oberthur.net$FXI1X-F66K0-R3V1X-MURTU'
+  }
+])
 
 const arrayOfValues10 = ObjectsParserByPath.getArrayOfValues({
   objectTobeParsed: responseGetOrderParams,
@@ -1110,4 +1121,32 @@ const arrayOfValues10 = ObjectsParserByPath.getArrayOfValues({
   identifierPath: identifierPath4
 });
 
-console.log(JSON.stringify(arrayOfValues10)  === exptectedResult10 ? 'passed': 'failed ' + exptectedResult10, arrayOfValues10)
+console.log(JSON.stringify(arrayOfValues10)  === exptectedResult10 ? 'passed': 'failed ' + exptectedResult10)
+
+
+
+
+
+
+const checkParamInQuoteItemPathToState7 = '[].orderItem.[].orderItem.[0].product.characteristic.[1].value.[0]';
+
+const identifierPath5 = '[].orderItem.[].product.name';
+
+const exptectedResult11 = JSON.stringify([
+  {
+    identifier: 'Mobility Prepaid (TLO) #1',
+    parameterValue: 8912230200156698000
+  },
+  {
+    identifier: 'Mobility Prepaid (TLO) #2',
+    parameterValue: 8912230200156694000
+  }
+])
+
+const arrayOfValues11 = ObjectsParserByPath.getArrayOfValues({
+  objectTobeParsed: responseGetOrderParams,
+  path: checkParamInQuoteItemPathToState7,
+  identifierPath: identifierPath5
+});
+
+console.log(JSON.stringify(arrayOfValues11)  === exptectedResult11 ? 'passed': 'failed ' + exptectedResult11)
