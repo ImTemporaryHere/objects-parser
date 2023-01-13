@@ -59,6 +59,7 @@ class ObjectsParserByPath {
 
       const identifiedObjectsToBeParsed = this.handlePathWithArrays(this._identifierPath, true)
       
+
       let identifierPath = this._identifierPath.join('.').split('.[].').pop()
       const lengthForSlice  = this._identifierPath.length - identifierPath.split('.').length
       let pathToParameterValue = this._path.slice(lengthForSlice).join('.')
@@ -147,6 +148,12 @@ class ObjectsParserByPath {
       else{
         path = _path.slice(1,).join('.')
       }
+
+    // console.log('this._objectTobeParsed', this._objectTobeParsed);  
+    
+    if(!this._objectTobeParsed) {
+      return []
+    }
 
     (this._objectTobeParsed as Array<any>).forEach((objectInArray)=>{
   
@@ -1604,3 +1611,420 @@ const arrayOfValues13 = ObjectsParserByPath.getArrayOfValues({
 });
 // test 12
 console.log('test 12 ',JSON.stringify(arrayOfValues13)  === exptectedResult13 ? 'passed': 'failed ' + exptectedResult13)
+
+
+const twoTLOtwoEsimSLO = [
+  {
+    "customerCategoryId": "a88bb5d3-9064-ae45-ff6d-1c30709b26ef",
+    "customerId": "taemailAUiJPQt_yZhQNhP@telus.com",
+    "distributionChannelId": "PERMIT",
+    "effectiveDate": "2023-01-12T08:39:57.199Z",
+    "extendedParameters": {
+      "transactionType": [
+        "Enroll"
+      ],
+      "hierarchyUnrolled": [
+        "true"
+      ]
+    },
+    "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/install-base-tmf-service/productInventory/v6/product/55f5e669-ba70-4847-aa45-ba88c4a1cbab?Business-id=taemailAUiJPQt_yZhQNhP@telus.com",
+    "id": "55f5e669-ba70-4847-aa45-ba88c4a1cbab",
+    "isBundle": false,
+    "isCustomerVisible": true,
+    "eventGenerating": false,
+    "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf",
+    "name": "e-SIM Card (SLO) #1",
+    "overrideMode": "NET",
+    "parentProductId": "4a94a966-93fa-4fa2-9663-74c4dfa38dc5",
+    "productType": "PRODUCT",
+    "quantity": "1",
+    "quoteId": "6734a1e1-5b75-4872-97b3-5334e9393b90",
+    "rootProductId": "4a94a966-93fa-4fa2-9663-74c4dfa38dc5",
+    "startDate": "2023-01-12T08:39:57.199Z",
+    "status": "COMPLETED",
+    "terminationDate": "2023-01-12T08:40:57.174Z",
+    "relatedParty": [
+      {
+        "id": "taemailAUiJPQt_yZhQNhP@telus.com",
+        "role": "Customer",
+        "@referredType": "Customer"
+      }
+    ],
+    "productSpecification": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/220d1870-6743-46bc-810f-3f8122622438",
+      "id": "c9c717b5-f61a-4a4d-b70f-df0931f7a1a1",
+      "name": "e-SIM Card (PS)",
+      "version": "0.6",
+      "@referredType": "ProductSpecificationRef"
+    },
+    "productOffering": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/220d1870-6743-46bc-810f-3f8122622438",
+      "id": "220d1870-6743-46bc-810f-3f8122622438",
+      "name": "e-SIM Card",
+      "@referredType": "Product offering"
+    },
+    "productOrder": {
+      "id": "25fedeb5-061b-4f4e-9301-d861f1c31e71",
+      "@referredType": "ProductOrderRef"
+    },
+    "characteristic": [
+      {
+        "attributeId": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+        "id": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+        "name": "[Public] ICCID",
+        "technical": false,
+        "value": [
+          "8912230200156693588"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      },
+      {
+        "attributeId": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+        "id": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+        "name": "[Public] Activation Code",
+        "technical": false,
+        "value": [
+          "LPA:1$rsp-1007.oberthur.net$A7LXR-TYNNH-XYB3V-PYBWT"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      },
+      {
+        "attributeId": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+        "id": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+        "name": "Needs Fulfillment?",
+        "technical": false,
+        "value": [
+          "Yes"
+        ],
+        "displayValue": [
+          "Yes"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      }
+    ],
+    "isOneTimeOffering": true,
+    "@type": "Product"
+  },
+  {
+    "customerCategoryId": "a88bb5d3-9064-ae45-ff6d-1c30709b26ef",
+    "customerId": "taemailAUiJPQt_yZhQNhP@telus.com",
+    "distributionChannelId": "PERMIT",
+    "effectiveDate": "2023-01-12T08:39:46.107Z",
+    "extendedParameters": {
+      "transactionType": [
+        "Enroll"
+      ],
+      "hierarchyUnrolled": [
+        "true"
+      ]
+    },
+    "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/install-base-tmf-service/productInventory/v6/product/84bd1abe-5778-4623-9a04-73298e218713?Business-id=taemailAUiJPQt_yZhQNhP@telus.com",
+    "id": "84bd1abe-5778-4623-9a04-73298e218713",
+    "isBundle": false,
+    "isCustomerVisible": true,
+    "eventGenerating": false,
+    "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf",
+    "name": "e-SIM Card (SLO) #1",
+    "overrideMode": "NET",
+    "parentProductId": "572e2476-a5fd-4cb3-ad93-7dbda066f43c",
+    "productType": "PRODUCT",
+    "quantity": "1",
+    "quoteId": "6734a1e1-5b75-4872-97b3-5334e9393b90",
+    "rootProductId": "572e2476-a5fd-4cb3-ad93-7dbda066f43c",
+    "startDate": "2023-01-12T08:39:46.107Z",
+    "status": "COMPLETED",
+    "relatedParty": [
+      {
+        "id": "taemailAUiJPQt_yZhQNhP@telus.com",
+        "role": "Customer",
+        "@referredType": "Customer"
+      }
+    ],
+    "productSpecification": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/220d1870-6743-46bc-810f-3f8122622438",
+      "id": "c9c717b5-f61a-4a4d-b70f-df0931f7a1a1",
+      "name": "e-SIM Card (PS)",
+      "version": "0.6",
+      "@referredType": "ProductSpecificationRef"
+    },
+    "productOffering": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/220d1870-6743-46bc-810f-3f8122622438",
+      "id": "220d1870-6743-46bc-810f-3f8122622438",
+      "name": "e-SIM Card",
+      "@referredType": "Product offering"
+    },
+    "productOrder": {
+      "id": "25fedeb5-061b-4f4e-9301-d861f1c31e71",
+      "@referredType": "ProductOrderRef"
+    },
+    "characteristic": [
+      {
+        "attributeId": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+        "id": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+        "name": "Needs Fulfillment?",
+        "technical": false,
+        "value": [
+          "Yes"
+        ],
+        "displayValue": [
+          "Yes"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      },
+      {
+        "attributeId": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+        "id": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+        "name": "[Public] ICCID",
+        "technical": false,
+        "value": [
+          "8912230200156699932"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      },
+      {
+        "attributeId": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+        "id": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+        "name": "[Public] Activation Code",
+        "technical": false,
+        "value": [
+          "LPA:1$rsp-1007.oberthur.net$6MMOY-IT3MN-BQUWC-2TPHU"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      }
+    ],
+    "isOneTimeOffering": true,
+    "@type": "Product"
+  },
+  {
+    "customerCategoryId": "a88bb5d3-9064-ae45-ff6d-1c30709b26ef",
+    "customerId": "taemailAUiJPQt_yZhQNhP@telus.com",
+    "distributionChannelId": "PERMIT",
+    "effectiveDate": "2023-01-12T08:39:46.107Z",
+    "extendedParameters": {
+      "transactionType": [
+        "Enroll"
+      ],
+      "externalProductOfferingId": [
+        "test_ta_plan"
+      ],
+      "hierarchyUnrolled": [
+        "true"
+      ]
+    },
+    "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/install-base-tmf-service/productInventory/v6/product/572e2476-a5fd-4cb3-ad93-7dbda066f43c?Business-id=taemailAUiJPQt_yZhQNhP@telus.com",
+    "id": "572e2476-a5fd-4cb3-ad93-7dbda066f43c",
+    "isBundle": false,
+    "isCustomerVisible": true,
+    "eventGenerating": false,
+    "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf",
+    "name": "Mobility Prepaid (TLO) #1",
+    "overrideMode": "NET",
+    "productType": "PRODUCT",
+    "quantity": "1",
+    "quoteId": "6734a1e1-5b75-4872-97b3-5334e9393b90",
+    "rootProductId": "572e2476-a5fd-4cb3-ad93-7dbda066f43c",
+    "startDate": "2023-01-12T08:39:46.107Z",
+    "status": "ACTIVE",
+    "terminationDate": "2023-01-12T08:40:45.983Z",
+    "relatedParty": [
+      {
+        "id": "taemailAUiJPQt_yZhQNhP@telus.com",
+        "role": "Customer",
+        "@referredType": "Customer"
+      }
+    ],
+    "productSpecification": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/48b2e652-946a-461c-9b30-886bf9769586",
+      "id": "96d8ff89-3c79-4483-bc0b-47b59ab74d53",
+      "name": "Mobility Prepaid (PS)",
+      "version": "0.2",
+      "@referredType": "ProductSpecificationRef"
+    },
+    "productOffering": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/48b2e652-946a-461c-9b30-886bf9769586",
+      "id": "48b2e652-946a-461c-9b30-886bf9769586",
+      "name": "Mobility Prepaid (TLO)",
+      "@referredType": "Product offering"
+    },
+    "productOrder": {
+      "id": "25fedeb5-061b-4f4e-9301-d861f1c31e71",
+      "@referredType": "ProductOrderRef"
+    },
+    "productPrice": [
+      {
+        "chargeMethod": "In Arrears",
+        "name": "Total RC by Product",
+        "priceType": "Total RC",
+        "price": {
+          "dutyFreeAmount": "0.00",
+          "priceChangeExcludingTaxRounded": "0.00",
+          "priceChangeIncludingTaxRounded": "0.00",
+          "taxIncludedAmount": "0.00",
+          "valueExcludingTax": "0.00",
+          "valueExcludingTaxRounded": "0.00",
+          "valueIncludingTax": "0.00",
+          "valueIncludingTaxRounded": "0.00",
+          "@type": "Price"
+        },
+        "@type": "ProductPrice"
+      },
+      {
+        "chargeMethod": "In Arrears",
+        "name": "Total NRC by Product",
+        "priceType": "Total NRC",
+        "price": {
+          "dutyFreeAmount": "0.00",
+          "priceChangeExcludingTaxRounded": "0.00",
+          "priceChangeIncludingTaxRounded": "0.00",
+          "taxIncludedAmount": "0.00",
+          "valueExcludingTax": "0.00",
+          "valueExcludingTaxRounded": "0.00",
+          "valueIncludingTax": "0.00",
+          "valueIncludingTaxRounded": "0.00",
+          "@type": "Price"
+        },
+        "@type": "ProductPrice"
+      }
+    ],
+    "isOneTimeOffering": false,
+    "@type": "Product"
+  },
+  {
+    "customerCategoryId": "a88bb5d3-9064-ae45-ff6d-1c30709b26ef",
+    "customerId": "taemailAUiJPQt_yZhQNhP@telus.com",
+    "distributionChannelId": "PERMIT",
+    "effectiveDate": "2023-01-12T08:39:57.289Z",
+    "extendedParameters": {
+      "transactionType": [
+        "Enroll"
+      ],
+      "externalProductOfferingId": [
+        "test_ta_plan"
+      ],
+      "hierarchyUnrolled": [
+        "true"
+      ]
+    },
+    "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/install-base-tmf-service/productInventory/v6/product/4a94a966-93fa-4fa2-9663-74c4dfa38dc5?Business-id=taemailAUiJPQt_yZhQNhP@telus.com",
+    "id": "4a94a966-93fa-4fa2-9663-74c4dfa38dc5",
+    "isBundle": false,
+    "isCustomerVisible": true,
+    "eventGenerating": false,
+    "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf",
+    "name": "Mobility Prepaid (TLO) #2",
+    "overrideMode": "NET",
+    "productType": "PRODUCT",
+    "quantity": "1",
+    "quoteId": "6734a1e1-5b75-4872-97b3-5334e9393b90",
+    "rootProductId": "4a94a966-93fa-4fa2-9663-74c4dfa38dc5",
+    "startDate": "2023-01-12T08:39:57.289Z",
+    "status": "ACTIVE",
+    "terminationDate": "2023-01-12T08:40:57.257Z",
+    "relatedParty": [
+      {
+        "id": "taemailAUiJPQt_yZhQNhP@telus.com",
+        "role": "Customer",
+        "@referredType": "Customer"
+      }
+    ],
+    "productSpecification": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/48b2e652-946a-461c-9b30-886bf9769586",
+      "id": "96d8ff89-3c79-4483-bc0b-47b59ab74d53",
+      "name": "Mobility Prepaid (PS)",
+      "version": "0.2",
+      "@referredType": "ProductSpecificationRef"
+    },
+    "productOffering": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/48b2e652-946a-461c-9b30-886bf9769586",
+      "id": "48b2e652-946a-461c-9b30-886bf9769586",
+      "name": "Mobility Prepaid (TLO)",
+      "@referredType": "Product offering"
+    },
+    "productOrder": {
+      "id": "25fedeb5-061b-4f4e-9301-d861f1c31e71",
+      "@referredType": "ProductOrderRef"
+    },
+    "productPrice": [
+      {
+        "chargeMethod": "In Arrears",
+        "name": "Total RC by Product",
+        "priceType": "Total RC",
+        "price": {
+          "dutyFreeAmount": "0.00",
+          "priceChangeExcludingTaxRounded": "0.00",
+          "priceChangeIncludingTaxRounded": "0.00",
+          "taxIncludedAmount": "0.00",
+          "valueExcludingTax": "0.00",
+          "valueExcludingTaxRounded": "0.00",
+          "valueIncludingTax": "0.00",
+          "valueIncludingTaxRounded": "0.00",
+          "@type": "Price"
+        },
+        "@type": "ProductPrice"
+      },
+      {
+        "chargeMethod": "In Arrears",
+        "name": "Total NRC by Product",
+        "priceType": "Total NRC",
+        "price": {
+          "dutyFreeAmount": "0.00",
+          "priceChangeExcludingTaxRounded": "0.00",
+          "priceChangeIncludingTaxRounded": "0.00",
+          "taxIncludedAmount": "0.00",
+          "valueExcludingTax": "0.00",
+          "valueExcludingTaxRounded": "0.00",
+          "valueIncludingTax": "0.00",
+          "valueIncludingTaxRounded": "0.00",
+          "@type": "Price"
+        },
+        "@type": "ProductPrice"
+      }
+    ],
+    "isOneTimeOffering": false,
+    "@type": "Product"
+  }
+]
+
+
+
+const checkParamInQuoteItemPathToState10 = '[].characteristic.[].value.[0]';
+
+const identifierPath8 = '[].characteristic.[].name';
+
+const exptectedResult14 = JSON.stringify([
+  {
+    identifier: '[Public] ICCID',
+    parameterValue: '8912230200156693588'
+  },
+  {
+    identifier: '[Public] Activation Code',
+    parameterValue: 'LPA:1$rsp-1007.oberthur.net$A7LXR-TYNNH-XYB3V-PYBWT'
+  },
+  { identifier: 'Needs Fulfillment?', parameterValue: 'Yes' },
+  { identifier: 'Needs Fulfillment?', parameterValue: 'Yes' },
+  {
+    identifier: '[Public] ICCID',
+    parameterValue: '8912230200156699932'
+  },
+  {
+    identifier: '[Public] Activation Code',
+    parameterValue: 'LPA:1$rsp-1007.oberthur.net$6MMOY-IT3MN-BQUWC-2TPHU'
+  }
+])
+
+const arrayOfValues14 = ObjectsParserByPath.getArrayOfValues({
+  objectTobeParsed: twoTLOtwoEsimSLO,
+  path: checkParamInQuoteItemPathToState10,
+  identifierPath: identifierPath8,
+});
+// test 13
+// console.log(arrayOfValues14)
+console.log('test 13 ',JSON.stringify(arrayOfValues14)  === exptectedResult14 ? 'passed': 'failed ' + exptectedResult14)
+
+
