@@ -59,10 +59,18 @@ class ObjectsParserByPath {
 
       const identifiedObjectsToBeParsed = this.handlePathWithArrays(this._identifierPath, true)
       
-      const identifierPath = this._identifierPath.join('.').split('.[].').pop()
+      let identifierPath = this._identifierPath.join('.').split('.[].').pop()
       const lengthForSlice  = this._identifierPath.length - identifierPath.split('.').length
-      const pathToParameterValue = this._path.slice(lengthForSlice).join('.')
-     
+      let pathToParameterValue = this._path.slice(lengthForSlice).join('.')
+
+
+      if(identifierPath.includes('[]') && !identifierPath.split('.').slice(1).includes('[]')) {
+        identifierPath = identifierPath.split('.').slice(1).join('.')
+      }
+      if(pathToParameterValue.includes('[]') && !pathToParameterValue.split('.').slice(1).includes('[]')) {
+        pathToParameterValue = pathToParameterValue.split('.').slice(1).join('.')
+      }
+
       return identifiedObjectsToBeParsed.map((identifiedObject)=>{
 
         const identifier = ObjectsParserByPath.getArrayOfValues({
@@ -535,7 +543,7 @@ const arrayOfValues = ObjectsParserByPath.getArrayOfValues({
   path: checkParamInQuoteItemPath,
 });
 
-console.log(JSON.stringify(arrayOfValues) === exptectedResult ? 'passed': 'failed ' + exptectedResult)
+console.log('test 1 ',JSON.stringify(arrayOfValues) === exptectedResult ? 'passed': 'failed ' + exptectedResult)
 
 
 
@@ -552,7 +560,7 @@ const arrayOfValues2 = ObjectsParserByPath.getArrayOfValues({
   identifierPath
 });
 
-console.log(JSON.stringify(arrayOfValues2)=== exptectedResult2 ? 'passed': 'failed ' + exptectedResult)
+console.log('test 2 ',JSON.stringify(arrayOfValues2)=== exptectedResult2 ? 'passed': 'failed ' + exptectedResult)
 
 
 
@@ -566,7 +574,7 @@ const arrayOfValues3 = ObjectsParserByPath.getArrayOfValues({
   path: checkParamInQuotePath,
 });
 
-console.log(JSON.stringify(arrayOfValues3) === exptectedResult3 ? 'passed': 'failed ' + exptectedResult3)
+console.log('test 3 ',JSON.stringify(arrayOfValues3) === exptectedResult3 ? 'passed': 'failed ' + exptectedResult3)
 
 
 
@@ -582,7 +590,7 @@ const arrayOfValues4 = ObjectsParserByPath.getArrayOfValues({
   path: checkParamInQuotePathValueInArray,
 });
 
-console.log(JSON.stringify(arrayOfValues4) === exptectedResult4 ? 'passed': 'failed ' + exptectedResult4)
+console.log('test 4 ',JSON.stringify(arrayOfValues4) === exptectedResult4 ? 'passed': 'failed ' + exptectedResult4)
 
 
 
@@ -600,7 +608,7 @@ const arrayOfValues6 = ObjectsParserByPath.getArrayOfValues({
   identifierPath: identifierPath2
 });
 
-console.log(JSON.stringify(arrayOfValues6)  === exptectedResult6 ? 'passed': 'failed ' + exptectedResult6)
+console.log('test 5 ',JSON.stringify(arrayOfValues6)  === exptectedResult6 ? 'passed': 'failed ' + exptectedResult6)
 
 
 
@@ -620,7 +628,7 @@ const arrayOfValues7 = ObjectsParserByPath.getArrayOfValues({
   identifierPath: identifierPath3
 });
 
-console.log(JSON.stringify(arrayOfValues7)  === exptectedResult7 ? 'passed': 'failed ' + exptectedResult7)
+console.log('test 6 ',JSON.stringify(arrayOfValues7)  === exptectedResult7 ? 'passed': 'failed ' + exptectedResult7)
 
 
 
@@ -1071,7 +1079,7 @@ const arrayOfValues8 = ObjectsParserByPath.getArrayOfValues({
   path: checkParamInQuoteItemPathToState4,
 });
 
-console.log(JSON.stringify(arrayOfValues8)  === exptectedResult8 ? 'passed': 'failed ' + exptectedResult8, arrayOfValues8)
+console.log('test 7 ',JSON.stringify(arrayOfValues8)  === exptectedResult8 ? 'passed': 'failed ' + exptectedResult8, arrayOfValues8)
 
 
 
@@ -1090,7 +1098,7 @@ const arrayOfValues9 = ObjectsParserByPath.getArrayOfValues({
   path: checkParamInQuoteItemPathToState5,
 });
 
-console.log(JSON.stringify(arrayOfValues9)  === exptectedResult9 ? 'passed': 'failed ' + exptectedResult9, arrayOfValues9)
+console.log('test 8 ',JSON.stringify(arrayOfValues9)  === exptectedResult9 ? 'passed': 'failed ' + exptectedResult9, arrayOfValues9)
 
 
 
@@ -1121,7 +1129,7 @@ const arrayOfValues10 = ObjectsParserByPath.getArrayOfValues({
   identifierPath: identifierPath4
 });
 
-console.log(JSON.stringify(arrayOfValues10)  === exptectedResult10 ? 'passed': 'failed ' + exptectedResult10)
+console.log('test 9 ',JSON.stringify(arrayOfValues10)  === exptectedResult10 ? 'passed': 'failed ' + exptectedResult10)
 
 
 
@@ -1149,4 +1157,450 @@ const arrayOfValues11 = ObjectsParserByPath.getArrayOfValues({
   identifierPath: identifierPath5
 });
 
-console.log(JSON.stringify(arrayOfValues11)  === exptectedResult11 ? 'passed': 'failed ' + exptectedResult11)
+console.log('test 10 ',JSON.stringify(arrayOfValues11)  === exptectedResult11 ? 'passed': 'failed ' + exptectedResult11)
+
+
+const threeEsimResponse = [
+  {
+    "customerCategoryId": "a88bb5d3-9064-ae45-ff6d-1c30709b26ef",
+    "customerId": "taemailuzGqYrP_dYLjmlS@telus.com",
+    "distributionChannelId": "PERMIT",
+    "effectiveDate": "2023-01-13T17:22:23.283Z",
+    "extendedParameters": {
+      "transactionType": [
+        "Enroll"
+      ],
+      "hierarchyUnrolled": [
+        "true"
+      ]
+    },
+    "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/install-base-tmf-service/productInventory/v6/product/1594a50b-74ce-4402-8122-8193e8a1d5b0?Business-id=taemailuzGqYrP_dYLjmlS@telus.com",
+    "id": "1594a50b-74ce-4402-8122-8193e8a1d5b0",
+    "isBundle": false,
+    "isCustomerVisible": true,
+    "eventGenerating": false,
+    "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf",
+    "name": "e-SIM Card (TLO) #1",
+    "overrideMode": "NET",
+    "productType": "PRODUCT",
+    "quantity": "1",
+    "quoteId": "30b79263-0698-44f6-a20f-46e56274b5c7",
+    "rootProductId": "1594a50b-74ce-4402-8122-8193e8a1d5b0",
+    "startDate": "2023-01-13T17:22:23.283Z",
+    "status": "COMPLETED",
+    "terminationDate": "2023-01-13T17:23:23.257Z",
+    "relatedParty": [
+      {
+        "id": "taemailuzGqYrP_dYLjmlS@telus.com",
+        "role": "Customer",
+        "@referredType": "Customer"
+      }
+    ],
+    "productSpecification": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+      "id": "c9c717b5-f61a-4a4d-b70f-df0931f7a1a1",
+      "name": "e-SIM Card (PS)",
+      "version": "0.6",
+      "@referredType": "ProductSpecificationRef"
+    },
+    "productOffering": {
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+      "id": "31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+      "name": "e-SIM Card (TLO)",
+      "@referredType": "Product offering"
+    },
+    "productOrder": {
+      "id": "a62fe65d-84a5-4e52-bfca-7eff6e51100b",
+      "@referredType": "ProductOrderRef"
+    },
+    "characteristic": [
+      {
+        "attributeId": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+        "id": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+        "name": "[Public] Activation Code",
+        "technical": false,
+        "value": [
+          "LPA:1$rsp-1007.oberthur.net$SNSV6-9D7N6-NMKPJ-CXGZF"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      },
+      {
+        "attributeId": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+        "id": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+        "name": "Needs Fulfillment?",
+        "technical": false,
+        "value": [
+          "Yes"
+        ],
+        "displayValue": [
+          "Yes"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      },
+      {
+        "attributeId": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+        "id": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+        "name": "[Public] ICCID",
+        "technical": false,
+        "value": [
+          "8912230200156693786"
+        ],
+        "visible": true,
+        "@type": "ProductSpecificationCharacteristic"
+      }
+    ],
+    "productPrice": [
+      {
+        "chargeMethod": "In Arrears",
+        "name": "Total RC by Product",
+        "priceType": "Total RC",
+        "price": {
+          "dutyFreeAmount": "0.00",
+          "priceChangeExcludingTaxRounded": "0.00",
+          "priceChangeIncludingTaxRounded": "0.00",
+          "taxIncludedAmount": "0.00",
+          "valueExcludingTax": "0.00",
+          "valueExcludingTaxRounded": "0.00",
+          "valueIncludingTax": "0.00",
+          "valueIncludingTaxRounded": "0.00",
+          "@type": "Price"
+        },
+        "@type": "ProductPrice"
+      },
+      {
+        "chargeMethod": "In Arrears",
+        "name": "Total NRC by Product",
+        "priceType": "Total NRC",
+        "price": {
+          "dutyFreeAmount": "0.00",
+          "priceChangeExcludingTaxRounded": "0.00",
+          "priceChangeIncludingTaxRounded": "0.00",
+          "taxIncludedAmount": "0.00",
+          "valueExcludingTax": "0.00",
+          "valueExcludingTaxRounded": "0.00",
+          "valueIncludingTax": "0.00",
+          "valueIncludingTaxRounded": "0.00",
+          "@type": "Price"
+        },
+        "@type": "ProductPrice"
+      }
+    ],
+    "isOneTimeOffering": true,
+    "@type": "Product"
+  },
+    {
+      "customerCategoryId": "a88bb5d3-9064-ae45-ff6d-1c30709b26ef",
+      "customerId": "taemailuzGqYrP_dYLjmlS@telus.com",
+      "distributionChannelId": "PERMIT",
+      "effectiveDate": "2023-01-13T17:22:22.536Z",
+      "extendedParameters": {
+        "transactionType": [
+          "Enroll"
+        ],
+        "hierarchyUnrolled": [
+          "true"
+        ]
+      },
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/install-base-tmf-service/productInventory/v6/product/3aa019ed-885c-44b9-943d-804f9ff38e00?Business-id=taemailuzGqYrP_dYLjmlS@telus.com",
+      "id": "3aa019ed-885c-44b9-943d-804f9ff38e00",
+      "isBundle": false,
+      "isCustomerVisible": true,
+      "eventGenerating": false,
+      "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf",
+      "name": "e-SIM Card (TLO) #2",
+      "overrideMode": "NET",
+      "productType": "PRODUCT",
+      "quantity": "1",
+      "quoteId": "30b79263-0698-44f6-a20f-46e56274b5c7",
+      "rootProductId": "3aa019ed-885c-44b9-943d-804f9ff38e00",
+      "startDate": "2023-01-13T17:22:22.536Z",
+      "status": "COMPLETED",
+      "terminationDate": "2023-01-13T17:23:22.508Z",
+      "relatedParty": [
+        {
+          "id": "taemailuzGqYrP_dYLjmlS@telus.com",
+          "role": "Customer",
+          "@referredType": "Customer"
+        }
+      ],
+      "productSpecification": {
+        "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+        "id": "c9c717b5-f61a-4a4d-b70f-df0931f7a1a1",
+        "name": "e-SIM Card (PS)",
+        "version": "0.6",
+        "@referredType": "ProductSpecificationRef"
+      },
+      "productOffering": {
+        "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+        "id": "31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+        "name": "e-SIM Card (TLO)",
+        "@referredType": "Product offering"
+      },
+      "productOrder": {
+        "id": "a62fe65d-84a5-4e52-bfca-7eff6e51100b",
+        "@referredType": "ProductOrderRef"
+      },
+      "characteristic": [
+        {
+          "attributeId": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+          "id": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+          "name": "[Public] ICCID",
+          "technical": false,
+          "value": [
+            "8912230200156693646"
+          ],
+          "visible": true,
+          "@type": "ProductSpecificationCharacteristic"
+        },
+        {
+          "attributeId": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+          "id": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+          "name": "Needs Fulfillment?",
+          "technical": false,
+          "value": [
+            "Yes"
+          ],
+          "displayValue": [
+            "Yes"
+          ],
+          "visible": true,
+          "@type": "ProductSpecificationCharacteristic"
+        },
+        {
+          "attributeId": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+          "id": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+          "name": "[Public] Activation Code",
+          "technical": false,
+          "value": [
+            "LPA:1$rsp-1007.oberthur.net$FHAFQ-RNFMI-AABLJ-PPST0"
+          ],
+          "visible": true,
+          "@type": "ProductSpecificationCharacteristic"
+        }
+      ],
+      "productPrice": [
+        {
+          "chargeMethod": "In Arrears",
+          "name": "Total RC by Product",
+          "priceType": "Total RC",
+          "price": {
+            "dutyFreeAmount": "0.00",
+            "priceChangeExcludingTaxRounded": "0.00",
+            "priceChangeIncludingTaxRounded": "0.00",
+            "taxIncludedAmount": "0.00",
+            "valueExcludingTax": "0.00",
+            "valueExcludingTaxRounded": "0.00",
+            "valueIncludingTax": "0.00",
+            "valueIncludingTaxRounded": "0.00",
+            "@type": "Price"
+          },
+          "@type": "ProductPrice"
+        },
+        {
+          "chargeMethod": "In Arrears",
+          "name": "Total NRC by Product",
+          "priceType": "Total NRC",
+          "price": {
+            "dutyFreeAmount": "0.00",
+            "priceChangeExcludingTaxRounded": "0.00",
+            "priceChangeIncludingTaxRounded": "0.00",
+            "taxIncludedAmount": "0.00",
+            "valueExcludingTax": "0.00",
+            "valueExcludingTaxRounded": "0.00",
+            "valueIncludingTax": "0.00",
+            "valueIncludingTaxRounded": "0.00",
+            "@type": "Price"
+          },
+          "@type": "ProductPrice"
+        }
+      ],
+      "isOneTimeOffering": true,
+      "@type": "Product"
+    },
+    {
+      "customerCategoryId": "a88bb5d3-9064-ae45-ff6d-1c30709b26ef",
+      "customerId": "taemailuzGqYrP_dYLjmlS@telus.com",
+      "distributionChannelId": "PERMIT",
+      "effectiveDate": "2023-01-13T17:22:21.337Z",
+      "extendedParameters": {
+        "transactionType": [
+          "Enroll"
+        ],
+        "hierarchyUnrolled": [
+          "true"
+        ]
+      },
+      "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/install-base-tmf-service/productInventory/v6/product/4c57ce1e-5f38-4303-bb47-1059fa102366?Business-id=taemailuzGqYrP_dYLjmlS@telus.com",
+      "id": "4c57ce1e-5f38-4303-bb47-1059fa102366",
+      "isBundle": false,
+      "isCustomerVisible": true,
+      "eventGenerating": false,
+      "marketId": "9fd4ad80-38fd-472c-9526-91b1e08d2faf",
+      "name": "e-SIM Card (TLO) #3",
+      "overrideMode": "NET",
+      "productType": "PRODUCT",
+      "quantity": "1",
+      "quoteId": "30b79263-0698-44f6-a20f-46e56274b5c7",
+      "rootProductId": "4c57ce1e-5f38-4303-bb47-1059fa102366",
+      "startDate": "2023-01-13T17:22:21.337Z",
+      "status": "COMPLETED",
+      "terminationDate": "2023-01-13T17:23:21.309Z",
+      "relatedParty": [
+        {
+          "id": "taemailuzGqYrP_dYLjmlS@telus.com",
+          "role": "Customer",
+          "@referredType": "Customer"
+        }
+      ],
+      "productSpecification": {
+        "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+        "id": "c9c717b5-f61a-4a4d-b70f-df0931f7a1a1",
+        "name": "e-SIM Card (PS)",
+        "version": "0.6",
+        "@referredType": "ProductSpecificationRef"
+      },
+      "productOffering": {
+        "href": "https://public-gateway-cloud-bss-is03.nc-gke-st.tsl.telus.com/catalog-integration-tmf/catalogManagement/productOffering/31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+        "id": "31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9",
+        "name": "e-SIM Card (TLO)",
+        "@referredType": "Product offering"
+      },
+      "productOrder": {
+        "id": "a62fe65d-84a5-4e52-bfca-7eff6e51100b",
+        "@referredType": "ProductOrderRef"
+      },
+      "characteristic": [
+        {
+          "attributeId": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+          "id": "0fdc5bc0-d23d-4ffd-980d-8f13600963f3",
+          "name": "[Public] Activation Code",
+          "technical": false,
+          "value": [
+            "LPA:1$rsp-1007.oberthur.net$H1KZJ-TKI0V-B19BO-BVWQL"
+          ],
+          "visible": true,
+          "@type": "ProductSpecificationCharacteristic"
+        },
+        {
+          "attributeId": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+          "id": "7e59eee3-4d77-4cf5-9930-c795cf0da481",
+          "name": "Needs Fulfillment?",
+          "technical": false,
+          "value": [
+            "Yes"
+          ],
+          "displayValue": [
+            "Yes"
+          ],
+          "visible": true,
+          "@type": "ProductSpecificationCharacteristic"
+        },
+        {
+          "attributeId": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+          "id": "05e51f8f-d377-4a05-a7e5-f6d6f96215e7",
+          "name": "[Public] ICCID",
+          "technical": false,
+          "value": [
+            "8912230200156697464"
+          ],
+          "visible": true,
+          "@type": "ProductSpecificationCharacteristic"
+        }
+      ],
+      "productPrice": [
+        {
+          "chargeMethod": "In Arrears",
+          "name": "Total RC by Product",
+          "priceType": "Total RC",
+          "price": {
+            "dutyFreeAmount": "0.00",
+            "priceChangeExcludingTaxRounded": "0.00",
+            "priceChangeIncludingTaxRounded": "0.00",
+            "taxIncludedAmount": "0.00",
+            "valueExcludingTax": "0.00",
+            "valueExcludingTaxRounded": "0.00",
+            "valueIncludingTax": "0.00",
+            "valueIncludingTaxRounded": "0.00",
+            "@type": "Price"
+          },
+          "@type": "ProductPrice"
+        },
+        {
+          "chargeMethod": "In Arrears",
+          "name": "Total NRC by Product",
+          "priceType": "Total NRC",
+          "price": {
+            "dutyFreeAmount": "0.00",
+            "priceChangeExcludingTaxRounded": "0.00",
+            "priceChangeIncludingTaxRounded": "0.00",
+            "taxIncludedAmount": "0.00",
+            "valueExcludingTax": "0.00",
+            "valueExcludingTaxRounded": "0.00",
+            "valueIncludingTax": "0.00",
+            "valueIncludingTaxRounded": "0.00",
+            "@type": "Price"
+          },
+          "@type": "ProductPrice"
+        }
+      ],
+      "isOneTimeOffering": true,
+      "@type": "Product"
+    }
+]
+
+const checkParamInQuoteItemPathToState8 = '[].status';
+
+const identifierPath6 = '[].productOffering.id';
+
+const exptectedResult12 = JSON.stringify([
+  {
+    identifier: '31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9',
+    parameterValue: 'COMPLETED'
+  },
+  {
+    identifier: '31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9',
+    parameterValue: 'COMPLETED'
+  },
+  {
+    identifier: '31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9',
+    parameterValue: 'COMPLETED'
+  }
+])
+
+const arrayOfValues12 = ObjectsParserByPath.getArrayOfValues({
+  objectTobeParsed: threeEsimResponse,
+  path: checkParamInQuoteItemPathToState8,
+  identifierPath: identifierPath6,
+});
+// test 11
+console.log('test 11 ',JSON.stringify(arrayOfValues12)  === exptectedResult12 ? 'passed': 'failed ' + exptectedResult12)
+
+
+
+
+
+
+
+
+
+
+const checkParamInQuoteItemPathToState9 = 'status';
+
+const identifierPath7 = 'productOffering.id';
+
+const exptectedResult13 = JSON.stringify([
+  {
+    identifier: '31dfe6fa-8ed3-44cd-82e9-8feb8fd849e9',
+    parameterValue: 'COMPLETED'
+  }
+])
+
+const arrayOfValues13 = ObjectsParserByPath.getArrayOfValues({
+  objectTobeParsed: threeEsimResponse[0],
+  path: checkParamInQuoteItemPathToState9,
+  identifierPath: identifierPath7,
+});
+// test 12
+console.log('test 12 ',JSON.stringify(arrayOfValues13)  === exptectedResult13 ? 'passed': 'failed ' + exptectedResult13)
